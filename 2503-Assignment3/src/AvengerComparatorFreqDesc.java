@@ -2,7 +2,7 @@
 
 import java.util.Comparator;
 
-public class LeastPopular implements Comparator<Avenger> {
+public class AvengerComparatorFreqDesc implements Comparator<Avenger> {
 
 	/**
 	 * override compare method for sorting the least popular avenger

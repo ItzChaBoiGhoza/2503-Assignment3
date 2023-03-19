@@ -2,7 +2,7 @@
 
 import java.util.Comparator;
 
-public class mentionIndex implements Comparator<Avenger> {
+public class AvengerComparatorMentionOrder implements Comparator<Avenger> {
 
 	@Override
 	public int compare(Avenger o1, Avenger o2) {
