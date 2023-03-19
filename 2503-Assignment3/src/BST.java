@@ -1,4 +1,4 @@
-
+package Assignment3;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -83,6 +83,10 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	public int size() {
 		return size;
 	}
+	
+	public void deleteNode(T key) {
+        root = deleteNode(root, key);
+    }
 
 	private int height(BSTNode r) {
 		int h = -1;
@@ -125,6 +129,34 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 			}
 		}
 	}
+	
+	private BSTNode deleteNode(BSTNode node, T key) {
+        if (node == null) {
+            return null;
+        }
+
+        int cmp = key.compareTo(node.data);
+        if (cmp < 0) {
+            node.left = deleteNode(node.left, key);
+        } else if (cmp > 0) {
+            node.right = deleteNode(node.right, key);
+        } else {
+            if (node.left == null) {
+                return node.right;
+            } else if (node.right == null) {
+                return node.left;
+            } else {
+                BSTNode temp = node.right;
+                while (temp.left != null) {
+                    temp = temp.left;
+                }
+                node.data = temp.data;
+                node.right = deleteNode(node.right, temp.data);
+            }
+        }
+
+        return node;
+    }
 
 	private void visit(BSTNode r) {
 		if (r != null)
@@ -193,4 +225,5 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 		Iterator it = new BSTIterator();
 		return  it;
 	}
+
 }
