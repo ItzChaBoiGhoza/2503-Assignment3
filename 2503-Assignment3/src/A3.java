@@ -1,5 +1,9 @@
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.Scanner;
+
 
 /**
  * COMP 2503 Winter 2023 Assignment 3
@@ -22,18 +26,18 @@ public class A3 {
 
 	private int topN = 4;
 	private int totalwordcount = 0;
-	private Scanner input = new Scanner(System.in);
-//	private BST<Avenger> alphabticalBST = new BST<>();
-//	private BST<Avenger> mentionBST = new BST<Avenger>(new AvengerComparatorMentionOrder());
-//	private BST<Avenger> mostPopularBST = new BST<Avenger>(new AvengerComparatorFreqDesc());
-//	private BST<Avenger> leastPopularBST = new BST<Avenger>(new AvengerComparatorFreqAsc());
+//	private Scanner input = new Scanner(System.in);
+	private BST<Avenger> alphabeticalBST = new BST<>();
+	private BST<Avenger> mentionBST = new BST<Avenger>(new AvengerComparatorMentionOrder());
+	private BST<Avenger> mostPopularBST = new BST<Avenger>(new AvengerComparatorFreqDesc());
+	private BST<Avenger> leastPopularBST = new BST<Avenger>(new AvengerComparatorFreqAsc());
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		A3 a1 = new A3();
 		a1.run();
 	}
 
-	public void run() {
+	public void run() throws FileNotFoundException {
 		readInput();
 		createdAlternativeOrderBSTs();
 		printResults();
@@ -45,14 +49,27 @@ public class A3 {
 		 *   use the tree iterator to do an in-order traversal of the alphabetical tree,
 		 *   and add avengers to the other trees
 		 */
+		mentionBST.deleteNode(new Avenger("hawkeye", "barton"));
 		
+		Iterator<Avenger> iterator = mentionBST.iterator();
+		while(iterator.hasNext()) {
+			Avenger avenger = iterator.next();
+			
+			if(avenger.equals(new Avenger("hawkeye", "barton"))) {
+				continue;
+			}
+			mostPopularBST.add(avenger);
+			leastPopularBST.add(avenger);
+			alphabeticalBST.add(avenger);
+		}
 	}
 
 	/**
 	 * read the input stream and keep track how many times avengers are mentioned by
 	 * alias or last name.
+	 * @throws FileNotFoundException 
 	 */
-	private void readInput() {
+	private void readInput() throws FileNotFoundException {
 		/*
 		 * While the scanner object has not reached end of stream, 
 		 * 	- read a word. 
@@ -66,6 +83,78 @@ public class A3 {
 		 *  newly created avenger to the list, remember to set the frequency and the mention order.
 		 * (Remember to keep track of the mention order by setting the mention order for each new avenger.)
 		 */
+		File file = new File("./input1.txt");
+		Scanner input = new Scanner(file);
+		if(!input.hasNext()) {
+			System.out.println("*----------------------------------------*");
+			System.out.println();
+			System.out.println("input file is empty, try a different input");
+			System.out.println();
+			System.out.println("*----------------------------------------*");
+			System.out.println();
+		}
+		while (input.hasNext()) {
+
+			String word = cleanWord(input.next());
+
+			if (word.length() > 0) {
+				totalwordcount++;
+				for(int i = 0; i < avengerRoster.length; i++) {
+					if(word.equals(avengerRoster[i][0]) || word.equals(avengerRoster[i][1])) {
+						Avenger avenger = new Avenger(avengerRoster[i][0], avengerRoster[i][1]);
+						boolean found = false;
+						for(Avenger a : mentionBST) {
+							if(a.equals(avenger)) {
+								avenger.addFrequency();
+								found = true;
+								break;
+							}
+							a.addFrequency();
+						}
+						if(!found) {
+							avenger.setMentionIndex(totalwordcount);
+							mentionBST.add(avenger);
+							avenger.addFrequency();
+						} 
+//						else {
+//							avenger.addFrequency();
+//						}
+//						if(avengersArrayList.contains(avenger)) {
+//							avengersArrayList.get(avengersArrayList.indexOf(avenger)).addFrequency();
+//						} else {
+//							avenger.addFrequency();
+//							avengersArrayList.add(avenger);
+//						}
+//						if(mentionBST.equals(avenger)) {
+//							avenger.addFrequency();
+//						} else {
+//							mentionBST.add(avenger);
+//							avenger.addFrequency();
+//						}
+					}
+				}
+			} 
+		}
+		input.close();
+	}
+	
+	/**
+	 * Method to catch only words and turn to lowercase
+	 * @param next
+	 * @return
+	 */
+	private String cleanWord(String next) {
+		// First, if there is an apostrophe, the substring
+		// before the apostrophe is used and the rest is ignored.
+		// Words are converted to all lowercase.
+		// All other punctuation and numbers are skipped.
+		String ret;
+		int inx = next.indexOf('\'');
+		if (inx != -1)
+			ret = next.substring(0, inx).toLowerCase().trim().replaceAll("[^a-z]", "");
+		else
+			ret = next.toLowerCase().trim().replaceAll("[^a-z]", "");
+		return ret;
 	}
 
 	/**
@@ -80,7 +169,7 @@ public class A3 {
 		System.out.println("All avengers in the order they appeared in the input stream:");
 		// TODO: Print the list of avengers in the order they appeared in the input
 		// Make sure you follow the formatting example in the sample output
-		//
+		mentionBST.inOrder();
 		System.out.println();
 
 		System.out.println("Top " + topN + " most popular avengers:");

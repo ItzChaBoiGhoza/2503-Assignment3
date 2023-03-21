@@ -6,10 +6,10 @@ public class Avenger implements Comparable<Avenger> {
 	private String heroName;
 	private String heroAlias;
 	private int frequency;
+	private int mentionIndex;
 
 	/**
 	 * Constructor for Avenger class
-	 * 
 	 * @param alias - String input
 	 * @param name  - String input
 	 */
@@ -17,6 +17,7 @@ public class Avenger implements Comparable<Avenger> {
 		heroName = name;
 		heroAlias = alias;
 		frequency = 0;
+		mentionIndex = 0;
 	}
 
 	/**
@@ -26,24 +27,6 @@ public class Avenger implements Comparable<Avenger> {
 	public int compareTo(Avenger a) {
 		return this.heroAlias.compareTo(a.getHeroAlias());
 	}
-
-	/**
-	 * Instantiate Avenger object and calling Comparator
-	 */
-	public static Comparator<Avenger> MostPopular = new Comparator<Avenger>() {
-		/*
-		 * Comparator override to sort object based on frequency
-		 */
-		public int compare(Avenger a, Avenger b) {
-			int freq1 = a.getFrequency();
-			int freq2 = b.getFrequency();
-
-			if (freq2 - freq1 == 0) {
-				return a.getHeroAlias().compareTo(b.getHeroAlias());
-			}
-			return freq2 - freq1;
-		}
-	};
 
 	/*
 	 * Override equals method that must return true if two Avenger objects have the
@@ -87,7 +70,13 @@ public class Avenger implements Comparable<Avenger> {
 		frequency++;
 	}
 	
+	public int getMentionIndex() {
+		return mentionIndex;
+	}
 	
+	public void setMentionIndex(int mentionIndex) {
+		this.mentionIndex = mentionIndex;
+	}
 
 	/*
 	 * String override to a specific format

@@ -1,5 +1,3 @@
-package Assignment3;
-
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -51,17 +49,14 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 			return this.getData().compareTo(o.getData());
 		}
 
-		public void isEmpty() {
-			left = null;
-			right = null;
-			size = 0;
-
+		public boolean isEmpty() {
+			return size == 0;
 		}
 	}
 
 	private static final int INORDER = 0;
 	private static final int PREORDER = 1;
-	private static final int POSTORDER = 1;
+	private static final int POSTORDER = 2;
 
 	private BSTNode root;
 	private int size;
@@ -82,6 +77,18 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 
 	public int size() {
 		return size;
+	}
+	
+	public void inOrder() {
+		traverse(root, INORDER);
+	}
+	
+	public void preOrder() {
+		traverse(root, PREORDER);
+	}
+	
+	public void postOrder() {
+		traverse(root, POSTORDER);
 	}
 	
 	public void deleteNode(T key) {
@@ -131,75 +138,121 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	}
 	
 	private BSTNode deleteNode(BSTNode node, T key) {
-        if (node == null) {
-            return null;
-        }
-
-        int cmp = key.compareTo(node.data);
-        if (cmp < 0) {
-            node.left = deleteNode(node.left, key);
-        } else if (cmp > 0) {
-            node.right = deleteNode(node.right, key);
-        } else {
-            if (node.left == null) {
-                return node.right;
-            } else if (node.right == null) {
-                return node.left;
-            } else {
-                BSTNode temp = node.right;
-                while (temp.left != null) {
-                    temp = temp.left;
-                }
-                node.data = temp.data;
-                node.right = deleteNode(node.right, temp.data);
-            }
-        }
-
-        return node;
+//        if (node == null) {
+//            return null;
+//        }
+//
+//        int cmp = key.compareTo(node.data);
+//        if (cmp < 0) {
+//            node.left = deleteNode(node.left, key);
+//        } else if (cmp > 0) {
+//            node.right = deleteNode(node.right, key);
+//        } else {
+//            if (node.left == null) {
+//                return node.right;
+//            } else if (node.right == null) {
+//                return node.left;
+//            } else {
+//                BSTNode temp = node.right;
+//                while (temp.left != null) {
+//                    temp = temp.left;
+//                }
+//                node.data = temp.data;
+//                node.right = deleteNode(node.right, temp.data);
+//            }
+//        }
+//
+//        return node;
+		if(node == null) {
+			return null;
+		}
+		
+		int cmp = comparator != null ? comparator.compare(key, node.data) : key.compareTo(node.data);
+		if(cmp < 0) {
+			node.left = deleteNode(node.left, key);
+		} else if(cmp > 0) {
+			node.right = deleteNode(node.right, key);
+		} else {
+			if(node.left == null) {
+				return node.right;
+			} else if(node.right == null) {
+				return node.left;
+			} else {
+				BSTNode temp = node.right;
+				while(temp.left != null) {
+					temp = temp.left;
+				}
+				node.data = temp.data;
+				node.right = deleteNode(node.right, temp.data);
+			}
+		}
+		return node;
     }
 
 	private void visit(BSTNode r) {
 		if (r != null)
-			queue.add(r.getData());
+			System.out.println(r.getData());
 	}
 
-	private void traverseInOrder(BSTNode r) {
-		if (r != null)
-			return;
-		else {
-			traverseInOrder(r.getLeft());
-			visit(r);
-			traverseInOrder(r.getRight());
-		}
-	}
-
-	private void traversePreOrder(BSTNode r) {
-		if (r != null)
-			return;
-		else {
-			visit(r);
-			traversePreOrder(r.getLeft());
-			traversePreOrder(r.getRight());
-		}
-	}
+//	private void traverseInOrder(BSTNode r) {
+//		if (r == null)
+//			return;
+//		else {
+//			traverseInOrder(r.getLeft());
+//			visit(r);
+//			traverseInOrder(r.getRight());
+//		}
+//	}
+//
+//	private void traversePreOrder(BSTNode r) {
+//		if (r == null)
+//			return;
+//		else {
+//			visit(r);
+//			traversePreOrder(r.getLeft());
+//			traversePreOrder(r.getRight());
+//		}
+//	}
+//	
+//	private void traversePostOrder(BSTNode r) {
+//		if(r == null)
+//			return;
+//		else {
+//			traversePostOrder(r.getLeft());
+//			traversePostOrder(r.getRight());
+//			visit(r);
+//		}
+//	}
+//
+//	private void traverse(BSTNode r, int travType) {
+//		if (travType == INORDER) {
+//			traverseInOrder(r);
+//		} else if (travType == PREORDER) {
+//			traversePreOrder(r);
+//		} else if (travType == POSTORDER) {
+//			traversePostOrder(r);
+//		}
+//	}
 	
-	private void traversePostOrder(BSTNode r) {
-		if(r != null)
-			return;
-		else {
-			traversePostOrder(r.getLeft());
-			traversePostOrder(r.getRight());
-			visit(r);
-		}
-	}
-
 	private void traverse(BSTNode r, int travType) {
-		if (travType == INORDER) {
-			traverseInOrder(r);
-		} else if (travType == PREORDER) {
-			traversePreOrder(r);
-		} else if (travType == POSTORDER) {
-			traversePostOrder(r);
+		if(r != null) {
+			switch (travType) {
+			case INORDER:
+					traverse(r.getLeft(), travType);
+					visit(r);
+					traverse(r.getRight(), travType);
+					break;
+			case PREORDER:
+					visit(r);
+					traverse(r.getLeft(), travType);
+					traverse(r.getRight(), travType);
+					break;
+			case POSTORDER:
+					traverse(r.getLeft(), travType);
+					traverse(r.getRight(), travType);
+					visit(r);
+					break;
+			}
 		}
 	}
 
