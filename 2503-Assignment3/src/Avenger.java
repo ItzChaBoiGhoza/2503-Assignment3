@@ -17,7 +17,7 @@ public class Avenger implements Comparable<Avenger> {
 		heroName = name;
 		heroAlias = alias;
 		frequency = 0;
-		mentionIndex = 0;
+		mentionIndex = -1;
 	}
 
 	/**

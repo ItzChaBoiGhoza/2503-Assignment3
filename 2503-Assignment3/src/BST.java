@@ -191,6 +191,7 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 
 	private void visit(BSTNode r) {
 		if (r != null)
+//			queue.add(r.getData());
 			System.out.println(r.getData());
 	}
 
@@ -259,7 +260,7 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	private class BSTIterator implements Iterator {
 		public BSTIterator() {
 				queue.isEmpty();
-				traverse(root, INORDER);
+//				traverse(root, INORDER);
 			}
 
 		@Override

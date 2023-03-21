@@ -13,7 +13,7 @@ import java.util.Scanner;
  * for storing the data. Multiple BSTs with alternative orderings are
  * constructed to show the required output.
  * 
- * @author Maryam Elahi
+ * @author Shamil Baig, Denzel Pascual, Ghoza Ghazali
  * @date Winter 2023
  */
 
@@ -49,18 +49,18 @@ public class A3 {
 		 *   use the tree iterator to do an in-order traversal of the alphabetical tree,
 		 *   and add avengers to the other trees
 		 */
-		mentionBST.deleteNode(new Avenger("hawkeye", "barton"));
+		alphabeticalBST.deleteNode(new Avenger("hawkeye", "barton"));
 		
-		Iterator<Avenger> iterator = mentionBST.iterator();
+		Iterator<Avenger> iterator = alphabeticalBST.iterator();
 		while(iterator.hasNext()) {
 			Avenger avenger = iterator.next();
 			
-			if(avenger.equals(new Avenger("hawkeye", "barton"))) {
+			if(avenger.equals(new Avenger("barton", "hawkeye"))) {
 				continue;
 			}
 			mostPopularBST.add(avenger);
 			leastPopularBST.add(avenger);
-			alphabeticalBST.add(avenger);
+			mentionBST.add(avenger);
 		}
 	}
 
@@ -93,6 +93,7 @@ public class A3 {
 			System.out.println("*----------------------------------------*");
 			System.out.println();
 		}
+		int mentionCounter = 0;
 		while (input.hasNext()) {
 
 			String word = cleanWord(input.next());
@@ -102,35 +103,29 @@ public class A3 {
 				for(int i = 0; i < avengerRoster.length; i++) {
 					if(word.equals(avengerRoster[i][0]) || word.equals(avengerRoster[i][1])) {
 						Avenger avenger = new Avenger(avengerRoster[i][0], avengerRoster[i][1]);
-						boolean found = false;
-						for(Avenger a : mentionBST) {
-							if(a.equals(avenger)) {
-								avenger.addFrequency();
-								found = true;
-								break;
-							}
-							a.addFrequency();
-						}
-						if(!found) {
-							avenger.setMentionIndex(totalwordcount);
-							mentionBST.add(avenger);
-							avenger.addFrequency();
-						} 
-//						else {
-//							avenger.addFrequency();
+//						boolean found = false;
+//						for(Avenger a : mentionBST) {
+//							if(a.equals(avenger)) {
+//								avenger.addFrequency();
+//								found = true;
+//								break;
+//							}
+//							a.addFrequency();
 //						}
-//						if(avengersArrayList.contains(avenger)) {
-//							avengersArrayList.get(avengersArrayList.indexOf(avenger)).addFrequency();
-//						} else {
-//							avenger.addFrequency();
-//							avengersArrayList.add(avenger);
-//						}
-//						if(mentionBST.equals(avenger)) {
-//							avenger.addFrequency();
-//						} else {
+//						if(!found) {
+//							avenger.setMentionIndex(totalwordcount);
 //							mentionBST.add(avenger);
 //							avenger.addFrequency();
 //						}
+						Avenger a = alphabeticalBST.find(avenger);
+						//create the find method under BST
+						if(a != null) {
+							a.addFrequency();
+						} else {
+							avenger.setMentionIndex(mentionCounter++);
+							avenger.addFrequency();
+							alphabeticalBST.add(avenger);
+						}
 					}
 				}
 			} 
@@ -169,7 +164,7 @@ public class A3 {
 		System.out.println("All avengers in the order they appeared in the input stream:");
 		// TODO: Print the list of avengers in the order they appeared in the input
 		// Make sure you follow the formatting example in the sample output
-		mentionBST.inOrder();
+		
 		System.out.println();
 
 		System.out.println("Top " + topN + " most popular avengers:");
@@ -186,7 +181,7 @@ public class A3 {
 
 		System.out.println("All mentioned avengers in alphabetical order:");
 		// TODO: Print the list of avengers in alphabetical order
-		//
+		mentionBST.inOrder();
 		System.out.println();
 
 		// TODO: Print the actual height and the optimal height for each of the four trees.
