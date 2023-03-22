@@ -9,11 +9,14 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 		private T data;
 		private BSTNode left;
 		private BSTNode right;
+		private BSTNode next;
+
 
 		public BSTNode(T d) {
 			setLeft(null);
 			setRight(null);
 			setData(d);
+			setNext(null);
 		}
 
 		public T getData() {
@@ -39,6 +42,14 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 		public void setRight(BSTNode right) {
 			this.right = right;
 		}
+		
+		public BSTNode getNext() {
+			return next;
+		}
+		
+		public void setNext(BSTNode n) {
+			next = n;
+		}
 
 		public boolean isLeaf() {
 			return (getLeft() == null) && (getRight() == null);
@@ -57,6 +68,7 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	private static final int INORDER = 0;
 	private static final int PREORDER = 1;
 	private static final int POSTORDER = 2;
+	private static final int LEVELORDER = 3;
 
 	private BSTNode root;
 	private int size;
@@ -91,6 +103,10 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 		traverse(root, POSTORDER);
 	}
 	
+	public void levelOrder() {
+		traverse(root, LEVELORDER);
+	}
+ 	
 	public void deleteNode(T key) {
         root = deleteNode(root, key);
     }
@@ -105,6 +121,18 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 			h = Math.max(leftHeight, rightHeight) + 1;
 		}
 		return h;
+	}
+	
+	public T find(T f) {
+		BSTNode curr = root;
+		while(curr != null && !f.equals(curr.getData())) {
+			if(f.compareTo(curr.getData()) < 0) {
+				curr = curr.getLeft();
+			} else {
+				curr = curr.getRight();
+			}
+		}
+		return (curr == null) ? null : curr.getData();
 	}
 
 	public int height() {
@@ -138,31 +166,6 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	}
 	
 	private BSTNode deleteNode(BSTNode node, T key) {
-//        if (node == null) {
-//            return null;
-//        }
-//
-//        int cmp = key.compareTo(node.data);
-//        if (cmp < 0) {
-//            node.left = deleteNode(node.left, key);
-//        } else if (cmp > 0) {
-//            node.right = deleteNode(node.right, key);
-//        } else {
-//            if (node.left == null) {
-//                return node.right;
-//            } else if (node.right == null) {
-//                return node.left;
-//            } else {
-//                BSTNode temp = node.right;
-//                while (temp.left != null) {
-//                    temp = temp.left;
-//                }
-//                node.data = temp.data;
-//                node.right = deleteNode(node.right, temp.data);
-//            }
-//        }
-//
-//        return node;
 		if(node == null) {
 			return null;
 		}
@@ -191,49 +194,8 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 
 	private void visit(BSTNode r) {
 		if (r != null)
-//			queue.add(r.getData());
 			System.out.println(r.getData());
 	}
-
-//	private void traverseInOrder(BSTNode r) {
-//		if (r == null)
-//			return;
-//		else {
-//			traverseInOrder(r.getLeft());
-//			visit(r);
-//			traverseInOrder(r.getRight());
-//		}
-//	}
-//
-//	private void traversePreOrder(BSTNode r) {
-//		if (r == null)
-//			return;
-//		else {
-//			visit(r);
-//			traversePreOrder(r.getLeft());
-//			traversePreOrder(r.getRight());
-//		}
-//	}
-//	
-//	private void traversePostOrder(BSTNode r) {
-//		if(r == null)
-//			return;
-//		else {
-//			traversePostOrder(r.getLeft());
-//			traversePostOrder(r.getRight());
-//			visit(r);
-//		}
-//	}
-//
-//	private void traverse(BSTNode r, int travType) {
-//		if (travType == INORDER) {
-//			traverseInOrder(r);
-//		} else if (travType == PREORDER) {
-//			traversePreOrder(r);
-//		} else if (travType == POSTORDER) {
-//			traversePostOrder(r);
-//		}
-//	}
 	
 	private void traverse(BSTNode r, int travType) {
 		if(r != null) {
@@ -253,6 +215,28 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 					traverse(r.getRight(), travType);
 					visit(r);
 					break;
+			case LEVELORDER:
+					levelOrder(r);
+					break;
+			}
+		}
+	}
+	
+	/* traverse the subtree r using level order. */
+	private void levelOrder(BSTNode r) {
+		if(r == null) {
+			return;
+		}
+		Queue<BSTNode> queue = new LinkedList<>();
+		queue.add(r);
+		while(!queue.isEmpty()) {
+			BSTNode node = queue.remove();
+			System.out.println(node.getData());
+			if(node.getLeft() != null) {
+				queue.add(node.getLeft());
+			}
+			if(node.getRight() != null) {
+				queue.add(node.getRight());
 			}
 		}
 	}
@@ -260,14 +244,12 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	private class BSTIterator implements Iterator {
 		public BSTIterator() {
 				queue.isEmpty();
-//				traverse(root, INORDER);
 			}
 
 		@Override
 		public boolean hasNext() {
 			return !queue.isEmpty();
 		}
-
 		@Override
 		public T next() {
 			return queue.remove();

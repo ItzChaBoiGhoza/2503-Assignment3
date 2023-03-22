@@ -54,10 +54,6 @@ public class A3 {
 		Iterator<Avenger> iterator = alphabeticalBST.iterator();
 		while(iterator.hasNext()) {
 			Avenger avenger = iterator.next();
-			
-			if(avenger.equals(new Avenger("barton", "hawkeye"))) {
-				continue;
-			}
 			mostPopularBST.add(avenger);
 			leastPopularBST.add(avenger);
 			mentionBST.add(avenger);
@@ -103,22 +99,7 @@ public class A3 {
 				for(int i = 0; i < avengerRoster.length; i++) {
 					if(word.equals(avengerRoster[i][0]) || word.equals(avengerRoster[i][1])) {
 						Avenger avenger = new Avenger(avengerRoster[i][0], avengerRoster[i][1]);
-//						boolean found = false;
-//						for(Avenger a : mentionBST) {
-//							if(a.equals(avenger)) {
-//								avenger.addFrequency();
-//								found = true;
-//								break;
-//							}
-//							a.addFrequency();
-//						}
-//						if(!found) {
-//							avenger.setMentionIndex(totalwordcount);
-//							mentionBST.add(avenger);
-//							avenger.addFrequency();
-//						}
 						Avenger a = alphabeticalBST.find(avenger);
-						//create the find method under BST
 						if(a != null) {
 							a.addFrequency();
 						} else {
@@ -164,34 +145,23 @@ public class A3 {
 		System.out.println("All avengers in the order they appeared in the input stream:");
 		// TODO: Print the list of avengers in the order they appeared in the input
 		// Make sure you follow the formatting example in the sample output
-		
 		System.out.println();
 
 		System.out.println("Top " + topN + " most popular avengers:");
 		// TODO: Print the most popular avengers, see the instructions for tie breaking
 		// Make sure you follow the formatting example in the sample output
-		//
+		
 		System.out.println();
 
 		System.out.println("Top " + topN + " least popular avengers:");
 		// TODO: Print the least popular avengers, see the instructions for tie breaking
 		// Make sure you follow the formatting example in the sample output
-		//
+		leastPopularBST.inOrder();
 		System.out.println();
 
 		System.out.println("All mentioned avengers in alphabetical order:");
 		// TODO: Print the list of avengers in alphabetical order
-		mentionBST.inOrder();
+		alphabeticalBST.inOrder();
 		System.out.println();
-
-		// TODO: Print the actual height and the optimal height for each of the four trees.
-//		System.out.println("Height of the mention order tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
-//		System.out.println("Height of the alphabetical tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
-//		System.out.println("Height of the most frequent tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
-//		System.out.println("Height of the least frequent tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
 	}
 }
