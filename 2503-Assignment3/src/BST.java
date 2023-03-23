@@ -69,6 +69,7 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	private static final int PREORDER = 1;
 	private static final int POSTORDER = 2;
 	private static final int LEVELORDER = 3;
+	private static final int REVINORDER = 4;
 
 	private BSTNode root;
 	private int size;
@@ -194,7 +195,12 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 
 	private void visit(BSTNode r) {
 		if (r != null)
-			System.out.println(r.getData());
+			queue.add(r.getData());
+//			System.out.println(r.getData());
+	}
+	
+	public void traverse(int travType) {
+		traverse(root, travType);
 	}
 	
 	private void traverse(BSTNode r, int travType) {
@@ -243,7 +249,8 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 
 	private class BSTIterator implements Iterator {
 		public BSTIterator() {
-				queue.isEmpty();
+				queue.clear();
+				traverse(root, INORDER);
 			}
 
 		@Override

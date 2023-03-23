@@ -145,23 +145,52 @@ public class A3 {
 		System.out.println("All avengers in the order they appeared in the input stream:");
 		// TODO: Print the list of avengers in the order they appeared in the input
 		// Make sure you follow the formatting example in the sample output
+		Iterator<Avenger> mention = mentionBST.iterator();
+		while(mention.hasNext()) {
+			System.out.println(mention.next());
+		}
 		System.out.println();
 
 		System.out.println("Top " + topN + " most popular avengers:");
 		// TODO: Print the most popular avengers, see the instructions for tie breaking
 		// Make sure you follow the formatting example in the sample output
-		
+		Iterator<Avenger> mostPopularIterator = mostPopularBST.iterator();
+		int counter = 0; 
+		while(mostPopularIterator.hasNext() && counter < topN) {
+			Avenger a = mostPopularIterator.next();
+			System.out.println(a.toString());
+			counter++;
+		}
 		System.out.println();
 
 		System.out.println("Top " + topN + " least popular avengers:");
 		// TODO: Print the least popular avengers, see the instructions for tie breaking
 		// Make sure you follow the formatting example in the sample output
-		leastPopularBST.inOrder();
+		Iterator<Avenger> least = leastPopularBST.iterator();
+		int count = 0; 
+		while(least.hasNext() && count < topN) {
+			System.out.println(least.next());
+			count++;
+		}
 		System.out.println();
 
 		System.out.println("All mentioned avengers in alphabetical order:");
 		// TODO: Print the list of avengers in alphabetical order
-		alphabeticalBST.inOrder();
+//		alphabeticalBST.inOrder();
+		Iterator<Avenger> alpha = alphabeticalBST.iterator();
+		while(alpha.hasNext()) {
+			System.out.println(alpha.next());
+		}
 		System.out.println();
+		
+		// TODO: Print the actual height and the optimal height for each of the four trees.
+//		System.out.println("Height of the mention order tree is : " + ??
+//				+ " (Optimal height for this tree is : " + ?? + ")");
+//		System.out.println("Height of the alphabetical tree is : " + ??
+//				+ " (Optimal height for this tree is : " + ?? + ")");
+//		System.out.println("Height of the most frequent tree is : " + ??
+//				+ " (Optimal height for this tree is : " + ?? + ")");
+//		System.out.println("Height of the least frequent tree is : " + ??
+//				+ " (Optimal height for this tree is : " + ?? + ")");
 	}
 }
