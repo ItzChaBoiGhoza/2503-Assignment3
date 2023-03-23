@@ -68,14 +68,22 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 		size = 0;
 		comparator = externalComp;
 	}
+	
+	private int compare(T o1, T o2) {
+		if(comparator == null) {
+			return o1.compareTo(o2);
+		} else {
+			return comparator.compare(o1, o2);
+		}
+	}
 
 	public int height() {
 		return height(root);
 	}
-	
-	public T find(T d) {
-		return find(d, root);
-	}
+//	
+//	public T find(T d) {
+//		return find(d, root);
+//	}
 	
 	public void inOrder() {
 		traverse(root, INORDER);
@@ -93,40 +101,27 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 //			h = (rh > lh ? 1 + rh : 1 + lh);
 //		}
 //		return h;
-//		int h = -1;
-//		if(r == null) {
-//			return h;
-//		} else {
-//			int leftHeight = height(r.getLeft());
-//			int righHeight = height(r.getRight());
-//			h = Math.max(leftHeight, righHeight) + 1;
-//		}
-//		return h;
+		int h = -1;
 		if(r == null) {
-			return -1;
+			return h;
+		} else {
+			int leftHeight = height(r.getLeft());
+			int righHeight = height(r.getRight());
+			h = Math.max(leftHeight, righHeight) + 1;
 		}
-		else return 1 + Math.max(height(r.getLeft()), height(r.getRight()));
+		return h;
 	}
 	
-	private T find(T d, BSTNode r) {
-//		BSTNode curr = root;
-//		while(curr != null && !f.equals(curr.getData())) {
-//			if(f.compareTo(curr.getData()) < 0) {
-//				curr = curr.getLeft();
-//			} else {
-//				curr = curr.getRight();
-//			}
-//		}
-//		return (curr == null) ? null : curr.getData();
-		if (r == null)
-			return null;
-		int c = d.compareTo(r.getData());
-		if (c == 0)
-			return r.getData();
-		else if (c < 0)
-			return find(d, r.getLeft());
-		else
-			return find(d, r.getRight());
+	public T find(T f) {
+		BSTNode curr = root;
+		while(curr != null && !f.equals(curr.getData())) {
+			if(compare(f, curr.getData()) < 0) {
+				curr = curr.getLeft();
+			} else {
+				curr = curr.getRight();
+			}
+		}
+		return (curr == null) ? null : curr.getData();
 	}
 
 	public void add(T d) {
@@ -144,7 +139,7 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	}
 
 	private void add(BSTNode r, BSTNode n) {
-		int c = n.compareTo(r);
+		int c = compare(n.getData(), r.getData());
 		if (c < 0) {
 			if (r.getLeft() == null) {
 				r.setLeft(n);
@@ -162,55 +157,55 @@ public class BST<T extends Comparable<T>> implements Iterable<T> {
 	}
 	
 	private BSTNode deleteNode(BSTNode node, T key) {
-//		if(node == null) {
-//			return null;
-//		}
-//		
-//		int cmp = comparator != null ? comparator.compare(key, node.data) : key.compareTo(node.data);
-//		if(cmp < 0) {
-//			node.left = deleteNode(node.left, key);
-//		} else if(cmp > 0) {
-//			node.right = deleteNode(node.right, key);
-//		} else {
-//			if(node.left == null) {
-//				return node.right;
-//			} else if(node.right == null) {
-//				return node.left;
-//			} else {
-//				BSTNode temp = node.right;
-//				while(temp.left != null) {
-//					temp = temp.left;
-//				}
-//				node.data = temp.data;
-//				node.right = deleteNode(node.right, temp.data);
-//			}
-//		}
-//		return node;
-		if (node == null) {
-            return null;
-        }
-
-        int cmp = key.compareTo(node.data);
-        if (cmp < 0) {
-            node.left = deleteNode(node.left, key);
-        } else if (cmp > 0) {
-            node.right = deleteNode(node.right, key);
-        } else {
-            if (node.left == null) {
-                return node.right;
-            } else if (node.right == null) {
-                return node.left;
-            } else {
-                BSTNode temp = node.right;
-                while (temp.left != null) {
-                    temp = temp.left;
-                }
-                node.data = temp.data;
-                node.right = deleteNode(node.right, temp.data);
-            }
-        }
-
-        return node;
+		if(node == null) {
+			return null;
+		}
+		
+		int cmp = comparator != null ? comparator.compare(key, node.data) : key.compareTo(node.data);
+		if(cmp < 0) {
+			node.left = deleteNode(node.left, key);
+		} else if(cmp > 0) {
+			node.right = deleteNode(node.right, key);
+		} else {
+			if(node.left == null) {
+				return node.right;
+			} else if(node.right == null) {
+				return node.left;
+			} else {
+				BSTNode temp = node.right;
+				while(temp.left != null) {
+					temp = temp.left;
+				}
+				node.data = temp.data;
+				node.right = deleteNode(node.right, temp.data);
+			}
+		}
+		return node;
+//		if (node == null) {
+//            return null;
+//        }
+//
+//        int cmp = compare(key, node.data);
+//        if (cmp < 0) {
+//            node.left = deleteNode(node.left, key);
+//        } else if (cmp > 0) {
+//            node.right = deleteNode(node.right, key);
+//        } else {
+//            if (node.left == null) {
+//                return node.right;
+//            } else if (node.right == null) {
+//                return node.left;
+//            } else {
+//                BSTNode temp = node.right;
+//                while (temp.left != null) {
+//                    temp = temp.left;
+//                }
+//                node.data = temp.data;
+//                node.right = deleteNode(node.right, temp.data);
+//            }
+//        }
+//
+//        return node;
     }
 
 	private void visit(BSTNode r) {
