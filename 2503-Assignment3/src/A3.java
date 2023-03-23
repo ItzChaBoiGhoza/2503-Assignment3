@@ -139,7 +139,7 @@ public class A3 {
 	private void printResults() {
 		System.out.println("Total number of words: " + totalwordcount);
 		// TODO: Print the number of mentioned avengers after deleting "Barton".
-		//System.out.println("Number of Avengers Mentioned: " + ??);
+		System.out.println("Number of Avengers Mentioned: " + (mentionBST.height() + 1));
 		System.out.println();
 
 		System.out.println("All avengers in the order they appeared in the input stream:");
@@ -184,13 +184,13 @@ public class A3 {
 		System.out.println();
 		
 		// TODO: Print the actual height and the optimal height for each of the four trees.
-//		System.out.println("Height of the mention order tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
-//		System.out.println("Height of the alphabetical tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
-//		System.out.println("Height of the most frequent tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
-//		System.out.println("Height of the least frequent tree is : " + ??
-//				+ " (Optimal height for this tree is : " + ?? + ")");
+		System.out.println("Height of the mention order tree is : " + mentionBST.height()
+				+ " (Optimal height for this tree is : " + mentionBST.size() + ")");
+		System.out.println("Height of the alphabetical tree is : " + alphabeticalBST.height()
+				+ " (Optimal height for this tree is : " + alphabeticalBST.size() + ")");
+		System.out.println("Height of the most frequent tree is : " + mostPopularBST.height()
+				+ " (Optimal height for this tree is : " + mostPopularBST.size() + ")");
+		System.out.println("Height of the least frequent tree is : " + leastPopularBST.height()
+				+ " (Optimal height for this tree is : " + leastPopularBST.size() + ")");
 	}
 }
